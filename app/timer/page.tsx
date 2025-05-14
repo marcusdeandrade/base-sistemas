@@ -13,7 +13,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Card } from '@/components/ui/card';
 import { Icon } from '@iconify/react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
@@ -28,7 +27,10 @@ import {
 } from "@/components/ui/select";
 import { StudySessionList } from '@/components/StudySessionList';
 import { Subject, StudySession, defaultSubjects } from '@/types/study';
-import { PageTitle } from '@/components/PageTitle';
+import { PageContent } from '@/components/PageContent';
+import { ContentCard } from '@/components/ContentCard';
+import { CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
 
 interface CircularProgressProps {
   value: number;
@@ -266,46 +268,54 @@ export default function TimerPage() {
   };
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 py-6 space-y-6 max-w-[1400px]">
-      <PageTitle 
-        title="Timer de Estudos"
-        subtitle="Gerencie seu tempo de estudo de forma eficiente com timer contínuo ou pomodoro"
-      />
-
+    <PageContent
+      title="Timer de Estudos"
+      subtitle="Gerencie seu tempo de estudo de forma eficiente com timer contínuo ou pomodoro"
+    >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <Card className="w-full p-4 sm:p-8 bg-gradient-to-br from-card/50 to-card shadow-xl">
-          <div className="space-y-4">
-            {/* Subject Selection */}
-            <div className="h-[40px]">
-              <Select
-                value={selectedSubject?.id}
-                onValueChange={(value) => {
-                  const subject = defaultSubjects.find(s => s.id === value);
-                  if (subject) setSelectedSubject(subject);
-                }}
-                disabled={isRunning}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Selecione a matéria" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Matérias</SelectLabel>
-                    {defaultSubjects.map((subject) => (
-                      <SelectItem key={subject.id} value={subject.id}>
-                        <div className="flex items-center gap-2">
-                          <div className={`w-2 h-2 rounded-full ${subject.color}`} />
-                          {subject.name}
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+        <ContentCard 
+          className="bg-secondary/50 shadow-none border"
+          headerClassName="pb-2"
+          contentClassName="px-6 pt-2 pb-6"
+          header={
+            <div className="flex justify-between items-center">
+              <CardTitle>Timer</CardTitle>
+              <div className="flex gap-2">
+                <Label htmlFor="subject" className="sr-only">Matéria</Label>
+                <Select
+                  value={selectedSubject?.id}
+                  onValueChange={(value) => {
+                    const subject = defaultSubjects.find(s => s.id === value);
+                    if (subject) setSelectedSubject(subject);
+                  }}
+                  disabled={isRunning}
+                >
+                  <SelectTrigger id="subject" className="w-[180px]">
+                    <SelectValue placeholder="Selecione a matéria" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Matérias</SelectLabel>
+                      {defaultSubjects.map((subject) => (
+                        <SelectItem key={subject.id} value={subject.id}>
+                          <div className="flex items-center gap-2">
+                            <div className={`w-3 h-3 rounded-full ${subject.color}`} />
+                            {subject.name}
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-
+          }
+          gradient={false}
+        >
+          <div className="grid gap-6">
             {/* Timer Controls Section */}
-            <div className="min-h-[80px] flex flex-col gap-2">
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="timer-type" className="sr-only">Tipo de Timer</Label>
               {/* Timer Type Selection */}
               <Tabs 
                 value={timerType}
@@ -325,7 +335,7 @@ export default function TimerPage() {
               {/* Pomodoro Mode Selection */}
               <div className={cn(
                 "transition-all duration-300",
-                timerType === 'pomodoro' ? 'opacity-100 h-auto' : 'opacity-0 h-0'
+                timerType === 'pomodoro' ? 'opacity-100 h-auto mt-2' : 'opacity-0 h-0 overflow-hidden'
               )}>
                 <Tabs
                   value={pomodoroMode}
@@ -365,72 +375,93 @@ export default function TimerPage() {
             </div>
 
             {/* Timer Display */}
-            <div className="flex justify-center items-center -mt-2">
-              <CircularProgress
-                value={timerType === 'continuous' 
-                  ? (elapsedTime / timerDurations.continuous) * 100 
-                  : (time / timerDurations.pomodoro[pomodoroMode]) * 100}
-                size={280}
-                strokeWidth={16}
-                showLabel
-                label={formatTime(timerType === 'continuous' ? elapsedTime : time)}
-                className={cn(
-                  timerType === 'continuous' ? 'stroke-blue-500/25' : 'stroke-red-500/25'
-                )}
-                progressClassName={cn(
-                  "transition-all duration-300",
-                  timerType === 'continuous' ? 'stroke-blue-500' : 'stroke-red-500'
-                )}
-                labelClassName={cn(
-                  "text-5xl",
-                  timerType === 'continuous' ? 'text-blue-500' : 'text-red-500'
-                )}
-              />
+            <div className="flex justify-center items-center py-6">
+              <div className="relative inline-block">
+                <CircularProgress
+                  value={timerType === 'continuous' 
+                    ? (elapsedTime / timerDurations.continuous) * 100 
+                    : (time / timerDurations.pomodoro[pomodoroMode]) * 100}
+                  size={260}
+                  strokeWidth={18}
+                  showLabel
+                  label={formatTime(timerType === 'continuous' ? elapsedTime : time)}
+                  className={cn(
+                    timerType === 'continuous' ? 'stroke-blue-500/25' : 'stroke-red-500/25'
+                  )}
+                  progressClassName={cn(
+                    "transition-all duration-300",
+                    timerType === 'continuous' ? 'stroke-blue-500' : 'stroke-red-500'
+                  )}
+                  labelClassName={cn(
+                    "text-5xl",
+                    timerType === 'continuous' ? 'text-blue-500' : 'text-red-500'
+                  )}
+                />
+              </div>
             </div>
 
+            {/* Warning Card when running */}
+            {isRunning && (
+              <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-md p-3 text-amber-800 dark:text-amber-300 text-sm flex items-center gap-2">
+                <Icon icon="heroicons:exclamation-triangle" className="h-5 w-5 text-amber-500" />
+                <div>
+                  <p className="font-medium">Timer em andamento</p>
+                  <p className="text-xs mt-0.5 text-amber-700 dark:text-amber-400">Parar o timer irá encerrar a sessão atual de estudo</p>
+                </div>
+              </div>
+            )}
+
             {/* Controls */}
-            <div className="flex items-center justify-center gap-4 flex-wrap">
+            <div className="flex justify-center items-center gap-6 mt-4">
               {!isRunning ? (
-                <Button
-                  onClick={handleStart}
-                  size="lg"
-                  className="bg-emerald-600/10 dark:bg-emerald-600/20 hover:bg-emerald-600/20 text-emerald-500 border border-emerald-600/60 shadow-none w-[140px]"
+                <Button 
+                  onClick={handleStart} 
                   disabled={!selectedSubject}
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                  size="lg"
                 >
                   <Icon icon="heroicons:play" className="w-6 h-6 mr-2" />
-                  Iniciar
+                  <span className="text-base">Iniciar</span>
                 </Button>
               ) : (
-                <Button
+                <Button 
                   onClick={handlePause}
+                  className="bg-amber-500 hover:bg-amber-600 text-white"
                   size="lg"
-                  className="bg-amber-600/10 dark:bg-amber-600/20 hover:bg-amber-600/20 text-amber-500 border border-amber-600/60 shadow-none w-[140px]"
                 >
                   <Icon icon="heroicons:pause" className="w-6 h-6 mr-2" />
-                  Pausar
+                  <span className="text-base">Pausar</span>
                 </Button>
               )}
 
               <AlertDialog open={showStopDialog} onOpenChange={setShowStopDialog}>
                 <AlertDialogTrigger asChild>
-                  <Button
+                  <Button 
+                    variant="destructive" 
+                    className="bg-red-500 hover:bg-red-600 text-white"
+                    disabled={!isRunning && !currentSession}
                     size="lg"
-                    className="bg-red-600/10 dark:bg-red-600/20 hover:bg-red-600/20 text-red-500 border border-red-600/60 shadow-none w-[140px]"
                   >
                     <Icon icon="heroicons:stop" className="w-6 h-6 mr-2" />
-                    Parar
+                    <span className="text-base">Parar</span>
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent className="sm:max-w-[425px]">
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Deseja parar o timer?</AlertDialogTitle>
+                    <AlertDialogTitle className="text-red-600 flex items-center gap-2">
+                      <Icon icon="heroicons:exclamation-triangle" className="h-5 w-5" />
+                      Deseja parar o timer?
+                    </AlertDialogTitle>
                     <AlertDialogDescription>
-                      Esta ação irá resetar o timer. Você tem certeza que deseja continuar?
+                      Esta ação irá encerrar a sessão atual e salvá-la com o tempo acumulado até agora. O timer será resetado.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleStop} className="bg-destructive hover:bg-destructive/90">
+                    <AlertDialogAction 
+                      onClick={handleStop} 
+                      className="bg-red-500 hover:bg-red-600 text-white"
+                    >
                       Sim, parar timer
                     </AlertDialogAction>
                   </AlertDialogFooter>
@@ -438,13 +469,13 @@ export default function TimerPage() {
               </AlertDialog>
             </div>
           </div>
-        </Card>
+        </ContentCard>
 
         {/* Study Sessions List */}
         <div className="w-full">
           <StudySessionList sessions={sessions} />
         </div>
       </div>
-    </div>
+    </PageContent>
   );
 } 

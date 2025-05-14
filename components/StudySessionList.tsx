@@ -1,10 +1,11 @@
 'use client';
 
 import { StudySession } from '@/types/study';
-import { Card } from '@/components/ui/card';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Icon } from '@iconify/react';
+import { ContentCard } from '@/components/ContentCard';
+import { CardDescription, CardTitle } from '@/components/ui/card';
 
 interface StudySessionListProps {
   sessions: StudySession[];
@@ -21,55 +22,68 @@ export function StudySessionList({ sessions }: StudySessionListProps) {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Sessões de Estudo</h2>
-        <span className="text-sm text-muted-foreground">
-          {sessions.length} sessões
-        </span>
-      </div>
-      
-      <div className="space-y-3">
-        {sessions.map((session) => (
-          <Card key={session.id} className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className={`w-3 h-3 rounded-full ${session.subject.color}`} />
-                <div>
-                  <h3 className="font-medium">{session.subject.name}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {formatDistanceToNow(session.startTime, { 
-                      addSuffix: true,
-                      locale: ptBR 
-                    })}
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-4">
-                <div className="text-right">
-                  <p className="text-sm font-medium">{formatTime(session.duration)}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {session.type === 'pomodoro' ? 'Pomodoro' : 'Timer Corrido'}
-                  </p>
+    <ContentCard
+      className="bg-secondary/50 shadow-none border"
+      headerClassName="pb-2"
+      contentClassName="px-6 pt-2 pb-6"
+      header={
+        <div className="flex flex-col space-y-1.5">
+          <CardTitle>Sessões de Estudo</CardTitle>
+          <CardDescription>
+            {sessions.length > 0 
+              ? `${sessions.length} ${sessions.length === 1 ? 'sessão' : 'sessões'} de estudo registrada${sessions.length === 1 ? '' : 's'}`
+              : "Nenhuma sessão de estudo registrada ainda"
+            }
+          </CardDescription>
+        </div>
+      }
+      gradient={false}
+    >
+      <div className="grid gap-3">
+        {sessions.length > 0 ? (
+          sessions.map((session) => (
+            <div key={session.id} className="p-3 rounded-md border bg-card/50 hover:bg-card/80 transition-colors">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className={`w-3 h-3 rounded-full ${session.subject.color} shadow-sm`} />
+                  <div>
+                    <h3 className="font-medium">{session.subject.name}</h3>
+                    <p className="text-xs text-muted-foreground">
+                      {formatDistanceToNow(session.startTime, { 
+                        addSuffix: true,
+                        locale: ptBR 
+                      })}
+                    </p>
+                  </div>
                 </div>
                 
-                <Icon 
-                  icon={session.completed ? 'heroicons:check-circle' : 'heroicons:clock'} 
-                  className={`w-5 h-5 ${session.completed ? 'text-green-500' : 'text-muted-foreground'}`}
-                />
+                <div className="flex items-center gap-3">
+                  <div className="text-right">
+                    <p className="text-sm font-medium">{formatTime(session.duration)}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {session.type === 'pomodoro' ? 'Pomodoro' : 'Timer Corrido'}
+                    </p>
+                  </div>
+                  
+                  <div className={`flex items-center justify-center`}>
+                    <Icon 
+                      icon={session.completed ? 'heroicons:check-circle' : 'heroicons:clock'} 
+                      className={`w-5 h-5 ${session.completed ? 'text-green-500' : 'text-muted-foreground'}`}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-          </Card>
-        ))}
-        
-        {sessions.length === 0 && (
-          <div className="text-center py-8 text-muted-foreground">
-            <Icon icon="heroicons:clock" className="w-12 h-12 mx-auto mb-3 opacity-50" />
-            <p>Nenhuma sessão de estudo registrada</p>
+          ))
+        ) : (
+          <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
+            <div className="h-10 w-10 rounded-full bg-muted/20 mb-3 flex items-center justify-center">
+              <Icon icon="heroicons:clock" className="w-5 h-5 opacity-60" />
+            </div>
+            <p className="text-sm">Comece um novo timer para registrar sua sessão de estudo</p>
           </div>
         )}
       </div>
-    </div>
+    </ContentCard>
   );
 } 

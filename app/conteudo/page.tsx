@@ -1,7 +1,7 @@
 'use client';
 
-import { PageTitle } from '@/components/PageTitle';
-import { Card } from '@/components/ui/card';
+import { PageContent } from '@/components/PageContent';
+import { ContentCard } from '@/components/ContentCard';
 import { Icon } from '@iconify/react';
 import { Button } from '@/components/ui/button';
 import {
@@ -52,15 +52,13 @@ const mockContents: Content[] = [
 
 export default function ConteudoPage() {
   return (
-    <div className="px-4 sm:px-6 lg:px-8 py-6 space-y-6 max-w-[1400px]">
-      <PageTitle 
-        title="Conteúdo"
-        subtitle="Gerencie e acompanhe seu material de estudo"
-      />
-
+    <PageContent
+      title="Conteúdo"
+      subtitle="Gerencie e acompanhe seu material de estudo"
+    >
       {/* Quick Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-        <Card className="p-6 bg-gradient-to-br from-card/50 to-card shadow-xl">
+        <ContentCard contentClassName="p-6">
           <div className="flex items-center gap-4">
             <div className="rounded-xl bg-primary/10 p-2.5">
               <Icon 
@@ -73,9 +71,9 @@ export default function ConteudoPage() {
               <p className="text-2xl font-bold">24</p>
             </div>
           </div>
-        </Card>
+        </ContentCard>
 
-        <Card className="p-6 bg-gradient-to-br from-card/50 to-card shadow-xl">
+        <ContentCard contentClassName="p-6">
           <div className="flex items-center gap-4">
             <div className="rounded-xl bg-primary/10 p-2.5">
               <Icon 
@@ -88,9 +86,9 @@ export default function ConteudoPage() {
               <p className="text-2xl font-bold">8</p>
             </div>
           </div>
-        </Card>
+        </ContentCard>
 
-        <Card className="p-6 bg-gradient-to-br from-card/50 to-card shadow-xl">
+        <ContentCard contentClassName="p-6">
           <div className="flex items-center gap-4">
             <div className="rounded-xl bg-primary/10 p-2.5">
               <Icon 
@@ -103,26 +101,29 @@ export default function ConteudoPage() {
               <p className="text-2xl font-bold">16</p>
             </div>
           </div>
-        </Card>
+        </ContentCard>
       </div>
 
       {/* Content Table */}
-      <Card className="bg-gradient-to-br from-card/50 to-card shadow-xl overflow-hidden">
-        <div className="p-6 border-b">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <h3 className="text-lg font-semibold">Conteúdos Recentes</h3>
-              <p className="text-sm text-muted-foreground">
-                Lista dos últimos conteúdos acessados
-              </p>
+      <ContentCard
+        header={
+          <div className="p-6 border-b">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h3 className="text-lg font-semibold">Conteúdos Recentes</h3>
+                <p className="text-sm text-muted-foreground">
+                  Lista dos últimos conteúdos acessados
+                </p>
+              </div>
+              <Button>
+                <Icon icon="heroicons:plus" className="h-5 w-5 mr-2" />
+                Novo Conteúdo
+              </Button>
             </div>
-            <Button>
-              <Icon icon="heroicons:plus" className="h-5 w-5 mr-2" />
-              Novo Conteúdo
-            </Button>
           </div>
-        </div>
-
+        }
+        contentClassName="p-0"
+      >
         <Table>
           <TableHeader>
             <TableRow>
@@ -167,7 +168,7 @@ export default function ConteudoPage() {
             ))}
           </TableBody>
         </Table>
-      </Card>
-    </div>
+      </ContentCard>
+    </PageContent>
   );
 } 

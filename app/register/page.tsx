@@ -4,6 +4,7 @@ import React from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { PageTitle } from "@/components/PageTitle";
 
 export default function RegisterPage() {
   const handleSubmit = (e: React.FormEvent) => {
@@ -15,12 +16,11 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-md space-y-8 p-8 bg-white rounded-xl shadow-lg">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900">Criar conta</h2>
-          <p className="mt-2 text-sm text-gray-600">
-            Preencha seus dados para começar
-          </p>
-        </div>
+        <PageTitle 
+          title="Criar conta"
+          subtitle="Preencha seus dados para começar"
+          className="text-center" 
+        />
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div className="space-y-4">

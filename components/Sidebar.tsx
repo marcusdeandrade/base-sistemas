@@ -22,6 +22,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useSidebar } from '@/lib/sidebar-context';
 
 const navItems = [
   {
@@ -43,14 +44,13 @@ const navItems = [
 
 export function Sidebar({ className }: { className?: string }) {
   const pathname = usePathname();
-  const [isCollapsed, setIsCollapsed] = React.useState(false);
+  const { isCollapsed, setIsCollapsed, isMobile } = useSidebar();
 
   return (
     <Card className={cn(
       'relative h-full min-h-screen transition-all duration-300',
       'border-r rounded-none',
       isCollapsed ? 'w-[80px]' : 'w-[280px]',
-      'md:relative md:left-0',
       'fixed left-0 top-0 z-50',
       className
     )}>
@@ -81,22 +81,24 @@ export function Sidebar({ className }: { className?: string }) {
         </div>
       </CardHeader>
 
-      <Button
-        variant="ghost"
-        size="icon"
-        className={cn(
-          "absolute -right-4 top-6",
-          "h-8 w-8",
-          "flex items-center justify-center",
-          "rounded-full bg-background border shadow-sm",
-          "hover:bg-accent hover:text-accent-foreground",
-          "transition-transform",
-          isCollapsed && "rotate-180"
-        )}
-        onClick={() => setIsCollapsed(!isCollapsed)}
-      >
-        <Icon icon="heroicons:chevron-left" className="h-4 w-4" />
-      </Button>
+      {!isMobile && (
+        <Button
+          variant="ghost"
+          size="icon"
+          className={cn(
+            "absolute -right-4 top-6",
+            "h-8 w-8",
+            "flex items-center justify-center",
+            "rounded-full bg-background border shadow-sm",
+            "hover:bg-accent hover:text-accent-foreground",
+            "transition-transform",
+            isCollapsed && "rotate-180"
+          )}
+          onClick={() => setIsCollapsed(!isCollapsed)}
+        >
+          <Icon icon="heroicons:chevron-left" className="h-4 w-4" />
+        </Button>
+      )}
 
       <Separator />
 
