@@ -44,7 +44,7 @@ const navItems = [
 
 export function Sidebar({ className }: { className?: string }) {
   const pathname = usePathname();
-  const { isCollapsed, setIsCollapsed, isMobile } = useSidebar();
+  const { isCollapsed, setIsCollapsed, isMobile, setIsMobileOpen } = useSidebar();
 
   return (
     <Card className={cn(
@@ -81,7 +81,16 @@ export function Sidebar({ className }: { className?: string }) {
         </div>
       </CardHeader>
 
-      {!isMobile && (
+      {isMobile ? (
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute top-4 right-4"
+          onClick={() => setIsMobileOpen(false)}
+        >
+          <Icon icon="heroicons:x-mark" className="h-5 w-5" />
+        </Button>
+      ) : (
         <Button
           variant="ghost"
           size="icon"
@@ -122,6 +131,7 @@ export function Sidebar({ className }: { className?: string }) {
                     'text-muted-foreground'
                 )}
                 title={isCollapsed ? item.label : undefined}
+                onClick={() => isMobile && setIsMobileOpen(false)}
               >
                 <Icon 
                   icon={item.icon} 

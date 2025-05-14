@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Icon } from '@iconify/react';
 import { cn } from '@/lib/utils';
 import { SidebarProvider, useSidebar } from '@/lib/sidebar-context';
+import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 interface ClientLayoutProps {
   children: React.ReactNode;
@@ -12,6 +14,14 @@ interface ClientLayoutProps {
 
 function ClientLayoutContent({ children }: { children: React.ReactNode }) {
   const { isMobile, isMobileOpen, setIsMobileOpen, isCollapsed } = useSidebar();
+  const pathname = usePathname();
+
+  // Fechar a sidebar móvel quando a rota mudar
+  useEffect(() => {
+    if (isMobile && isMobileOpen) {
+      setIsMobileOpen(false);
+    }
+  }, [pathname, isMobile, isMobileOpen, setIsMobileOpen]);
 
   return (
     <div className='flex min-h-screen bg-background'>
@@ -59,11 +69,12 @@ function ClientLayoutContent({ children }: { children: React.ReactNode }) {
         </div>
       </main>
 
-      {/* Overlay */}
+      {/* Overlay - Clicking this will close the sidebar */}
       {isMobile && isMobileOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-30"
           onClick={() => setIsMobileOpen(false)}
+          aria-hidden="true"
         />
       )}
     </div>
