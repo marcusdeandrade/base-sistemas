@@ -1,0 +1,42 @@
+{
+    "projectId": "6823ffcd00224ab7a405",
+    "projectName": "teste_appwrite",
+    "databases": [
+        {
+            "id": "68240fd9002f4552cb8b",
+            "name": "teste_appwrite",
+            "collections": [
+                {
+                    "id": "users",
+                    "name": "Users",
+                    "attributes": [
+                        {
+                            "key": "name",
+                            "type": "string",
+                            "size": 255,
+                            "required": true
+                        },
+                        {
+                            "key": "email",
+                            "type": "string",
+                            "size": 255,
+                            "required": true
+                        },
+                        {
+                            "key": "phone",
+                            "type": "string",
+                            "size": 20,
+                            "required": false
+                        },
+                        {
+                            "key": "userId",
+                            "type": "string",
+                            "size": 255,
+                            "required": true
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+} 
