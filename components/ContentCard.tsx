@@ -3,6 +3,7 @@
 import { ReactNode } from 'react';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import { useSidebar } from '@/lib/sidebar-context';
 
 interface ContentCardProps {
   className?: string;
@@ -25,19 +26,24 @@ export function ContentCard({
   footer,
   gradient = true,
 }: ContentCardProps) {
+  const { isMobile } = useSidebar();
+
   return (
     <Card className={cn(
       gradient && "bg-gradient-to-br from-card/50 to-card shadow-xl",
+      isMobile && "overflow-hidden",
       className
     )}>
       {header && (
         <CardHeader className={cn(
+          isMobile && "px-4 py-4",
           headerClassName
         )}>
           {header}
         </CardHeader>
       )}
       <CardContent className={cn(
+        isMobile && "px-4 py-4",
         contentClassName
       )}>
         {children}
@@ -45,6 +51,7 @@ export function ContentCard({
       {footer && (
         <CardFooter className={cn(
           "border-t bg-gray-50/50",
+          isMobile && "px-4 py-3",
           footerClassName
         )}>
           {footer}

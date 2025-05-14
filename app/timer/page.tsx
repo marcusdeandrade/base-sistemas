@@ -272,13 +272,13 @@ export default function TimerPage() {
       title="Timer de Estudos"
       subtitle="Gerencie seu tempo de estudo de forma eficiente com timer contínuo ou pomodoro"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
         <ContentCard 
           className="bg-secondary/50 shadow-none border"
           headerClassName="pb-2"
-          contentClassName="px-6 pt-2 pb-6"
+          contentClassName="px-4 sm:px-6 pt-2 pb-4 sm:pb-6"
           header={
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
               <CardTitle>Timer</CardTitle>
               <div className="flex gap-2">
                 <Label htmlFor="subject" className="sr-only">Matéria</Label>
@@ -290,7 +290,7 @@ export default function TimerPage() {
                   }}
                   disabled={isRunning}
                 >
-                  <SelectTrigger id="subject" className="w-[180px]">
+                  <SelectTrigger id="subject" className="w-full sm:w-[180px]">
                     <SelectValue placeholder="Selecione a matéria" />
                   </SelectTrigger>
                   <SelectContent>
@@ -312,7 +312,7 @@ export default function TimerPage() {
           }
           gradient={false}
         >
-          <div className="grid gap-6">
+          <div className="grid gap-4 sm:gap-6">
             {/* Timer Controls Section */}
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="timer-type" className="sr-only">Tipo de Timer</Label>
@@ -375,14 +375,14 @@ export default function TimerPage() {
             </div>
 
             {/* Timer Display */}
-            <div className="flex justify-center items-center py-6">
+            <div className="flex justify-center items-center py-4 sm:py-6">
               <div className="relative inline-block">
                 <CircularProgress
                   value={timerType === 'continuous' 
                     ? (elapsedTime / timerDurations.continuous) * 100 
                     : (time / timerDurations.pomodoro[pomodoroMode]) * 100}
-                  size={260}
-                  strokeWidth={18}
+                  size={200}
+                  strokeWidth={16}
                   showLabel
                   label={formatTime(timerType === 'continuous' ? elapsedTime : time)}
                   className={cn(
@@ -393,7 +393,7 @@ export default function TimerPage() {
                     timerType === 'continuous' ? 'stroke-blue-500' : 'stroke-red-500'
                   )}
                   labelClassName={cn(
-                    "text-5xl",
+                    "text-4xl sm:text-5xl",
                     timerType === 'continuous' ? 'text-blue-500' : 'text-red-500'
                   )}
                 />
@@ -412,7 +412,7 @@ export default function TimerPage() {
             )}
 
             {/* Controls */}
-            <div className="flex justify-center items-center gap-6 mt-4">
+            <div className="flex justify-center items-center gap-4 sm:gap-6 mt-2 sm:mt-4">
               {!isRunning ? (
                 <Button 
                   onClick={handleStart} 
@@ -446,7 +446,7 @@ export default function TimerPage() {
                     <span className="text-base">Parar</span>
                   </Button>
                 </AlertDialogTrigger>
-                <AlertDialogContent className="sm:max-w-[425px]">
+                <AlertDialogContent className="max-w-[90vw] sm:max-w-[425px]">
                   <AlertDialogHeader>
                     <AlertDialogTitle className="text-red-600 flex items-center gap-2">
                       <Icon icon="heroicons:exclamation-triangle" className="h-5 w-5" />
@@ -456,7 +456,7 @@ export default function TimerPage() {
                       Esta ação irá encerrar a sessão atual e salvá-la com o tempo acumulado até agora. O timer será resetado.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
-                  <AlertDialogFooter>
+                  <AlertDialogFooter className="flex-col sm:flex-row gap-2">
                     <AlertDialogCancel>Cancelar</AlertDialogCancel>
                     <AlertDialogAction 
                       onClick={handleStop} 

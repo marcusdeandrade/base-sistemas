@@ -15,12 +15,12 @@ function ClientLayoutContent({ children }: { children: React.ReactNode }) {
 
   return (
     <div className='flex min-h-screen bg-background'>
-      {/* Mobile Menu Button */}
+      {/* Mobile Menu Button - Moved to top left */}
       {isMobile && (
         <Button
           variant="ghost"
           size="icon"
-          className="fixed top-4 left-4 z-50"
+          className="fixed top-4 left-4 z-50 bg-background/80 backdrop-blur-sm"
           onClick={() => setIsMobileOpen(!isMobileOpen)}
         >
           <Icon 
@@ -51,7 +51,7 @@ function ClientLayoutContent({ children }: { children: React.ReactNode }) {
       >
         <div 
           className={cn(
-            "p-4 lg:p-6",
+            "pt-16 px-4 pb-6 sm:pt-6 sm:px-6 lg:p-6", // Added top padding on mobile for the fixed button
             isMobile ? "transition-none" : "transition-all duration-200 ease-in-out"
           )}
         >
